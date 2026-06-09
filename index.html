@@ -2,10 +2,12 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>Surpresa de Realidade Aumentada ✨</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
     <style>
         body {
             margin: 0;
@@ -41,7 +43,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.75);
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -70,12 +72,12 @@
 
     <div id="botao-play">
         <h2>Preparar Mágica ❤️</h2>
-        <p>Toque em qualquer lugar do ecrã para ativar o som e abrir a câmara.</p>
+        <p>Toque em qualquer lugar da tela para ligar a câmera e ativar o som.</p>
     </div>
 
     <div id="instrucao">Aponte a câmara para a frase na caneca! ✨</div>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
         
         <a-assets>
             <video id="video-mensagem" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" preload="auto" loop="true" crossorigin="anonymous" playsinline webkit-playsinline></video>
@@ -94,31 +96,35 @@
         const video = document.getElementById('video-mensagem');
         let somDesbloqueado = false;
 
-        // Desbloqueia o áudio do navegador no primeiro toque do utilizador
+        // Tenta iniciar o vídeo e dar permissões assim que clicar no botão de entrada
         botaoPlay.addEventListener('click', function() {
+            // Garante que o vídeo toque e pause para o navegador aceitar o áudio posterior
             video.play().then(() => {
-                video.pause(); // Prepara o vídeo em standby com som permitido
+                video.pause(); 
                 somDesbloqueado = true;
-                botaoPlay.style.opacity = '0';
-                setTimeout(() => {
-                    botaoPlay.style.display = 'none';
-                }, 500);
+                esconderBotao();
             }).catch(error => {
-                console.log("Erro ao iniciar o áudio:", error);
-                // Caso falhe, avança mesmo assim para não travar o ecrã
-                botaoPlay.style.display = 'none';
+                console.log("Aviso de áudio:", error);
+                // Mesmo que o áudio falhe inicialmente, remove a tela para liberar a câmera
                 somDesbloqueado = true;
+                esconderBotao();
             });
         });
 
-        // Quando a câmara reconhecer a frase na caneca
+        function esconderBotao() {
+            botaoPlay.style.opacity = '0';
+            setTimeout(() => {
+                botaoPlay.style.display = 'none';
+            }, 500);
+        }
+
+        // Eventos do Marcador
         marcador.addEventListener('markerFound', function() {
             if (somDesbloqueado) {
                 video.play();
             }
         });
 
-        // Quando a câmara perder a caneca de vista
         marcador.addEventListener('markerLost', function() {
             video.pause();
         });
