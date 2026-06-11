@@ -42,7 +42,7 @@
         }
 
         .icone-coracao {
-            font-size: 3rem;
+            font-size: 3.5rem; /* Aumentado conforme solicitado anteriormente */
             color: #ff5e62;
             margin-bottom: 15px;
             display: inline-block;
@@ -95,7 +95,7 @@
 
         .btn-principal:active { transform: scale(0.98); }
 
-        /* TELA DA RASPADINHA */
+        /* TELA DO JOGO: SIMON/GENIUS */
         #tela-jogo {
             background: white;
             border-radius: 24px;
@@ -108,61 +108,47 @@
             animation: surgir 0.5s ease-out;
         }
 
-        #tela-jogo p {
+        #instrucoes-jogo {
             color: #475569;
-            margin-bottom: 20px;
-            font-size: 1rem;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
-        /* Área da Raspadinha */
-        .container-raspadinha {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 20px auto;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-            user-select: none;
-            background: #fff5f5;
+        /* Painel de Cores do Genius */
+        .painel-genius {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 260px;
+            height: 260px;
+            margin: 0 auto 25px auto;
         }
 
-        /* O que fica ESCONDIDO atrás */
-        .fundo-raspadinha {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-            z-index: 1;
-        }
-
-        .fundo-raspadinha .emoji {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-        }
-
-        .fundo-raspadinha .texto-sucesso {
-            color: #e11d48;
-            font-size: 1.4rem;
-            font-weight: bold;
-            line-height: 1.3;
-        }
-
-        /* A camada cinza que será raspada */
-        #canvas-raspadinha {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .botao-cor {
+            border: none;
+            border-radius: 20px;
             cursor: pointer;
-            z-index: 2;
-            touch-action: none;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+            transition: transform 0.1s, filter 0.1s;
+            opacity: 0.6; /* Estado normal mais apagado */
+        }
+
+        .botao-cor:active {
+            transform: scale(0.95);
+        }
+
+        /* Estilo Individual de Cada Cor */
+        .verde { background-color: #22c55e; border-bottom: 6px solid #15803d; }
+        .vermelho { background-color: #ef4444; border-bottom: 6px solid #b91c1c; }
+        .azul { background-color: #3b82f6; border-bottom: 6px solid #1d4ed8; }
+        .amarelo { background-color: #eab308; border-bottom: 6px solid #a16207; }
+
+        /* Classe que faz o botão acender/piscar */
+        .aceso {
+            opacity: 1 !important;
+            filter: brightness(1.3) drop-shadow(0 0 15px currentColor);
+            transform: scale(1.02);
         }
 
         /* EFEITO DE FOGOS DE ARTIFÍCIO */
@@ -245,7 +231,7 @@
             animation: surgir 0.5s ease-out;
         }
 
-        #tela-final span.emoji-presente { font-size: 3rem; }
+        #tela-final span.emoji-presente { font-size: 3.5rem; } /* Aumentado */
         #tela-final h1 { margin-top: 10px; }
         #tela-final p { color: #64748b; font-size: 0.95rem; line-height: 1.4; margin-bottom: 5px; }
 
@@ -307,21 +293,20 @@
         </div>
         <p class="desafio-texto">Ah, mas para ver minha homenagem não vai ser tão fácil assim... 😉</p>
         <button class="btn-principal" id="btn-ir-jogo">
-            <span>🎉</span> CLIQUE AQUI
+            <span>🎮</span> CLIQUE AQUI
         </button>
         <div class="rodape">SU BELA CRIATIVA</div>
     </div>
 
     <div id="tela-jogo">
-        <h1>Raspadinha do Pai! 🎁</h1>
-        <p>Use o dedo para raspar a tela e liberar sua surpresa:</p>
+        <h1>Jogo do Clique Certo! 🧠</h1>
+        <p id="instrucoes-jogo">Preste atenção na sequência...</p>
         
-        <div class="container-raspadinha">
-            <div class="fundo-raspadinha">
-                <span style="font-size: 50px;">❤️</span>
-                <span class="texto-sucesso">VÍDEO LIBERADO!<br>PREPARE O CORAÇÃO!</span>
-            </div>
-            <canvas id="canvas-raspadinha" width="280" height="280"></canvas>
+        <div class="painel-genius">
+            <button class="botao-cor verde" id="btn-0"></button>
+            <button class="botao-cor vermelho" id="btn-1"></button>
+            <button class="botao-cor azul" id="btn-2"></button>
+            <button class="botao-cor amarelo" id="btn-3"></button>
         </div>
         
         <div class="rodape">SU BELA CRIATIVA</div>
@@ -376,6 +361,7 @@
         const containerPlayer = document.getElementById('container-player');
         const menuFimVideo = document.getElementById('menu-fim-video');
         const telaFinal = document.getElementById('tela-final');
+        const textoInstrucoes = document.getElementById('instrucoes-jogo');
         
         const video = document.getElementById('video-principal');
         
@@ -387,103 +373,78 @@
 
         const legendaInstagram = "@subelacriativa #diadospais";
 
-        // CONFIGURAÇÃO DA RASPADINHA DIGITAL
-        const canvas = document.getElementById('canvas-raspadinha');
-        const ctx = canvas.getContext('2d');
-        let raspando = false;
-        let jogoConcluido = false;
-        let jaRaspouAlgumaVez = false; // Nova trava de segurança contra erros de load
+        // LÓGICA DO JOGO DO CLIQUE CERTO (GENIUS)
+        // Sequência fixa de 3 cores para ser rápido e certeiro para o pai acertar de primeira
+        const sequenciaJogo = [0, 2, 1]; // 0=Verde, 1=Vermelho, 2=Azul, 3=Amarelo
+        let passosUsuario = [];
+        let podeClicar = false;
 
-        function inicializarRaspadinha() {
-            jogoConcluido = false;
-            jaRaspouAlgumaVez = false;
-            
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = '#b8b8b8'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#cfcfcf';
-            for (let i = 0; i < canvas.width; i += 4) {
-                for (let j = 0; j < canvas.height; j += 4) {
-                    if (Math.random() > 0.5) {
-                        ctx.fillRect(i, j, 2, 2);
-                    }
+        // Função para acender visualmente o botão colorido
+        function acenderBotao(idCor) {
+            const botao = document.getElementById(`btn-${idCor}`);
+            botao.classList.add('aceso');
+            setTimeout(() => {
+                botao.classList.remove('aceso');
+            }, 500);
+        }
+
+        // Toca a sequência para o pai assistir
+        function demonstrarSequencia() {
+            podeClicar = false;
+            passosUsuario = [];
+            textoInstrucoes.innerText = "👀 Olhe atentamente...";
+            textoInstrucoes.style.color = "#3b82f6";
+
+            let i = 0;
+            const intervalo = setInterval(() => {
+                acenderBotao(sequenciaJogo[i]);
+                i++;
+                if (i >= sequenciaJogo.length) {
+                    clearInterval(intervalo);
+                    // Libera para o pai jogar após a demonstração terminar
+                    setTimeout(() => {
+                        podeClicar = true;
+                        textoInstrucoes.innerText = "👉 Sua vez! Repita a ordem:";
+                        textoInstrucoes.style.color = "#22c55e";
+                    }, 600);
                 }
+            }, 900);
+        }
+
+        // Captura e processa o clique do pai
+        function cliqueBotaoCor(idCor) {
+            if (!podeClicar) return;
+
+            acenderBotao(idCor);
+            passosUsuario.push(idCor);
+
+            // Verifica se errou o passo atual
+            const passoAtual = passosUsuario.length - 1;
+            if (passosUsuario[passoAtual] !== sequenciaJogo[passoAtual]) {
+                podeClicar = false;
+                textoInstrucoes.innerText = "❌ Ops! Ordem errada. Tente de novo!";
+                textoInstrucoes.style.color = "#ef4444";
+                
+                // Reinicia a demonstração após 1.5 segundos para ele tentar de novo
+                setTimeout(() => {
+                    demonstrarSequencia();
+                }, 1500);
+                return;
             }
 
-            ctx.fillStyle = '#555555';
-            ctx.font = 'bold 16px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('RASPE AQUI COM O DEDO', canvas.width / 2, canvas.height / 2 + 5);
-        }
-
-        function obterCoordenadas(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clienteX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clienteY = e.touches ? e.touches[0].clientY : e.clientY;
-            return {
-                x: clienteX - rect.left,
-                y: clienteY - rect.top
-            };
-        }
-
-        function iniciarRaspa(e) {
-            if (jogoConcluido) return;
-            raspando = true;
-            jaRaspouAlgumaVez = true; // Só valida a raspagem quando o usuário clicar/tocar voluntariamente
-            raspar(e);
-        }
-
-        function pararRaspa() {
-            raspando = false;
-            // Só faz a conta matemática se o usuário realmente tiver começado a raspar
-            if (!jogoConcluido && jaRaspouAlgumaVez) {
-                verificarPorcentagemRaspada();
-            }
-        }
-
-        function raspar(e) {
-            if (!raspando || jogoConcluido) return;
-            e.preventDefault();
-
-            const pos = obterCoordenadas(e);
-            
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(pos.x, pos.y, 25, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        function verificarPorcentagemRaspada() {
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const pixels = imgData.data;
-            let pixelsApagados = 0;
-
-            for (let i = 3; i < pixels.length; i += 4) {
-                if (pixels[i] === 0) {
-                    pixelsApagados++;
-                }
-            }
-
-            const totalPixels = canvas.width * canvas.height;
-            const porcentagem = (pixelsApagados / totalPixels) * 100;
-
-            // ALTERADO PARA 65% CONFORME SOLICITADO
-            if (porcentagem > 65) {
-                jogoConcluido = true;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Se acertou todos os passos da sequência
+            if (passosUsuario.length === sequenciaJogo.length) {
+                podeClicar = false;
+                textoInstrucoes.innerText = "✅ Perfeito!";
                 acionarSucesso();
             }
         }
 
-        // Eventos
-        canvas.addEventListener('mousedown', iniciarRaspa);
-        canvas.addEventListener('mousemove', raspar);
-        window.addEventListener('mouseup', pararRaspa);
+        // Atribui os eventos de clique nos 4 botões de cores
+        for (let id = 0; id < 4; id++) {
+            document.getElementById(`btn-${id}`).addEventListener('click', () => cliqueBotaoCor(id));
+        }
 
-        canvas.addEventListener('touchstart', iniciarRaspa);
-        canvas.addEventListener('touchmove', raspar);
-        window.addEventListener('touchend', pararRaspa);
 
         // FOGOS DE ARTIFÍCIO E VIBRAÇÃO
         function acionarSucesso() {
@@ -501,7 +462,7 @@
                     containerPlayer.style.display = 'flex';
                     video.play().catch(err => console.log("Erro ao reproduzir automaticamente:", err));
                 }, 3200);
-            }, 400);
+            }, 600);
         }
 
         function criarFogos() {
@@ -531,7 +492,8 @@
         btnIrJogo.addEventListener('click', function() {
             telaInicial.style.display = 'none';
             telaJogo.style.display = 'block';
-            inicializarRaspadinha();
+            // Inicia o jogo piscando as cores logo que a tela abre
+            setTimeout(demonstrarSequencia, 400);
         });
 
         video.addEventListener('ended', function() {
