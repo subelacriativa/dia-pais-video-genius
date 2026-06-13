@@ -42,7 +42,7 @@
         }
 
         .icone-coracao {
-            font-size: 3.5rem; /* Aumentado conforme solicitado anteriormente */
+            font-size: 3.5rem;
             color: #ff5e62;
             margin-bottom: 15px;
             display: inline-block;
@@ -131,20 +131,18 @@
             cursor: pointer;
             box-shadow: 0 6px 10px rgba(0,0,0,0.15);
             transition: transform 0.1s, filter 0.1s;
-            opacity: 0.6; /* Estado normal mais apagado */
+            opacity: 0.6;
         }
 
         .botao-cor:active {
             transform: scale(0.95);
         }
 
-        /* Estilo Individual de Cada Cor */
         .verde { background-color: #22c55e; border-bottom: 6px solid #15803d; }
         .vermelho { background-color: #ef4444; border-bottom: 6px solid #b91c1c; }
         .azul { background-color: #3b82f6; border-bottom: 6px solid #1d4ed8; }
         .amarelo { background-color: #eab308; border-bottom: 6px solid #a16207; }
 
-        /* Classe que faz o botão acender/piscar */
         .aceso {
             opacity: 1 !important;
             filter: brightness(1.3) drop-shadow(0 0 15px currentColor);
@@ -175,7 +173,7 @@
             animation: explodir 1s ease-out forwards;
         }
 
-        /* CONTAINER DO PLAYER (TELA 2) */
+        /* CONTAINER DO PLAYER */
         #container-player {
             position: fixed;
             top: 0;
@@ -196,7 +194,6 @@
             object-fit: contain;
         }
 
-        /* BOTÕES DO FIM DO VÍDEO */
         #menu-fim-video {
             position: absolute;
             top: 0;
@@ -218,7 +215,7 @@
             margin-bottom: 10px;
         }
 
-        /* TELA FINAL DE COMPARTILHAMENTO (TELA 3) */
+        /* TELA FINAL DE COMPARTILHAMENTO */
         #tela-final {
             background: white;
             border-radius: 24px;
@@ -231,7 +228,7 @@
             animation: surgir 0.5s ease-out;
         }
 
-        #tela-final span.emoji-presente { font-size: 3.5rem; } /* Aumentado */
+        #tela-final span.emoji-presente { font-size: 3.5rem; }
         #tela-final h1 { margin-top: 10px; }
         #tela-final p { color: #64748b; font-size: 0.95rem; line-height: 1.4; margin-bottom: 5px; }
 
@@ -280,7 +277,22 @@
             100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
         }
 
-        .rodape { margin-top: 20px; font-size: 0.8rem; color: #a0aec0; letter-spacing: 1px; }
+        .rodape { 
+            margin-top: 20px; 
+            font-size: 0.8rem; 
+            color: #a0aec0; 
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .rodape img {
+            max-width: 120px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -295,9 +307,11 @@
         <button class="btn-principal" id="btn-ir-jogo">
             <span>🎮</span> CLIQUE AQUI
         </button>
-       <div class="rodape">
-    <img src="https://raw.githubusercontent.com/subelacriativa/ra/main/logo_sbc.png" alt="Su Bela Criativa" style="max-width: 120px; height: auto;">
-</div>
+        <div class="rodape">
+            <img src="https://raw.githubusercontent.com/subelacriativa/ra/main/logo_sbc.png" alt="Su Bela Criativa" onerror="this.style.display='none'; document.getElementById('fb-1').style.display='block';">
+            <span id="fb-1" style="display:none; font-weight:bold;">SU BELA CRIATIVA</span>
+        </div>
+    </div>
 
     <div id="tela-jogo">
         <h1>Jogo do Clique Certo! 🧠</h1>
@@ -310,7 +324,10 @@
             <button class="botao-cor amarelo" id="btn-3"></button>
         </div>
         
-        <div class="rodape">SU BELA CRIATIVA</div>
+        <div class="rodape">
+            <img src="https://raw.githubusercontent.com/subelacriativa/ra/main/logo_sbc.png" alt="Su Bela Criativa" onerror="this.style.display='none'; document.getElementById('fb-2').style.display='block';">
+            <span id="fb-2" style="display:none; font-weight:bold;">SU BELA CRIATIVA</span>
+        </div>
     </div>
 
     <div id="efeito-fogos">
@@ -336,7 +353,7 @@
         <p>Guarde essa recordação ou envie direto para quem você ama!</p>
         
         <div class="lista-botoes">
-            <a href="https://api.whatsapp.com/send?text=Olha%20a%20surpresa%20linda%20que%20ganhei%20de%20Dia%20dos%20Pais!%20❤️%20https://subelacriativa.github.io/dia-pais-video-teste/" target="_blank" class="btn-opcao whatsapp">
+            <a href="https://wa.me/?text=Olha%20a%20surpresa%20linda%20que%20ganhei%20de%20Dia%20dos%20Pais!%20%E2%9D%A4%EF%B8%8F%20https://subelacriativa.github.io/dia-pais-video-teste/" target="_blank" class="btn-opcao whatsapp">
                 <span>💬</span> Compartilhar no WhatsApp
             </a>
             
@@ -352,7 +369,10 @@
                 ↩️ Voltar para a Mensagem Inicial
             </button>
         </div>
-        <div class="rodape">SU BELA CRIATIVA</div>
+        <div class="rodape">
+            <img src="https://raw.githubusercontent.com/subelacriativa/ra/main/logo_sbc.png" alt="Su Bela Criativa" onerror="this.style.display='none'; document.getElementById('fb-3').style.display='block';">
+            <span id="fb-3" style="display:none; font-weight:bold;">SU BELA CRIATIVA</span>
+        </div>
     </div>
 
     <script>
@@ -375,21 +395,20 @@
         const legendaInstagram = "@subelacriativa #diadospais";
 
         // LÓGICA DO JOGO DO CLIQUE CERTO (GENIUS)
-        // Sequência fixa de 3 cores para ser rápido e certeiro para o pai acertar de primeira
-        const sequenciaJogo = [0, 2, 1]; // 0=Verde, 1=Vermelho, 2=Azul, 3=Amarelo
+        const sequenciaJogo = [0, 2, 1]; 
         let passosUsuario = [];
         let podeClicar = false;
 
-        // Função para acender visualmente o botão colorido
         function acenderBotao(idCor) {
             const botao = document.getElementById(`btn-${idCor}`);
-            botao.classList.add('aceso');
-            setTimeout(() => {
-                botao.classList.remove('aceso');
-            }, 500);
+            if(botao) {
+                botao.classList.add('aceso');
+                setTimeout(() => {
+                    botao.classList.remove('aceso');
+                }, 500);
+            }
         }
 
-        // Toca a sequência para o pai assistir
         function demonstrarSequencia() {
             podeClicar = false;
             passosUsuario = [];
@@ -402,7 +421,6 @@
                 i++;
                 if (i >= sequenciaJogo.length) {
                     clearInterval(intervalo);
-                    // Libera para o pai jogar após a demonstração terminar
                     setTimeout(() => {
                         podeClicar = true;
                         textoInstrucoes.innerText = "👉 Sua vez! Repita a ordem:";
@@ -412,28 +430,24 @@
             }, 900);
         }
 
-        // Captura e processa o clique do pai
         function cliqueBotaoCor(idCor) {
             if (!podeClicar) return;
 
             acenderBotao(idCor);
             passosUsuario.push(idCor);
 
-            // Verifica se errou o passo atual
             const passoAtual = passosUsuario.length - 1;
             if (passosUsuario[passoAtual] !== sequenciaJogo[passoAtual]) {
                 podeClicar = false;
                 textoInstrucoes.innerText = "❌ Ops! Ordem errada. Tente de novo!";
                 textoInstrucoes.style.color = "#ef4444";
                 
-                // Reinicia a demonstração após 1.5 segundos para ele tentar de novo
                 setTimeout(() => {
                     demonstrarSequencia();
                 }, 1500);
                 return;
             }
 
-            // Se acertou todos os passos da sequência
             if (passosUsuario.length === sequenciaJogo.length) {
                 podeClicar = false;
                 textoInstrucoes.innerText = "✅ Perfeito!";
@@ -441,11 +455,9 @@
             }
         }
 
-        // Atribui os eventos de clique nos 4 botões de cores
         for (let id = 0; id < 4; id++) {
             document.getElementById(`btn-${id}`).addEventListener('click', () => cliqueBotaoCor(id));
         }
-
 
         // FOGOS DE ARTIFÍCIO E VIBRAÇÃO
         function acionarSucesso() {
@@ -493,7 +505,6 @@
         btnIrJogo.addEventListener('click', function() {
             telaInicial.style.display = 'none';
             telaJogo.style.display = 'block';
-            // Inicia o jogo piscando as cores logo que a tela abre
             setTimeout(demonstrarSequencia, 400);
         });
 
@@ -519,7 +530,7 @@
             telaInicial.style.display = 'block';
         });
 
-        // SOLUÇÃO DO INSTAGRAM
+        // COMPARTILHAMENTO DO INSTAGRAM
         btnInstagram.addEventListener('click', function() {
             navigator.clipboard.writeText(legendaInstagram).then(() => {
                 alert("✨ O @ da loja foi copiado!\n\nSe você tiver o app do Instagram, ele abrirá direto nos Stories. Selecione o vídeo na sua galeria e cole a marcação!");
